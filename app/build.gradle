@@ -6,7 +6,7 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.inlacou.inkbasicmodelslibraryproject"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -33,4 +33,5 @@ dependencies {
 
     implementation 'com.jakewharton.timber:timber:4.7.1'                                        //Better logging
     implementation 'com.github.irontec:InkSpannable:1.0.0'
+    implementation 'com.github.inlacou:PRipple:1.2.0'
 }
