@@ -4,7 +4,7 @@
 
 ## Usage
 
-Edit some linear layout parameters:
+Edit some `LinearLayout` parameters:
 
 ```kt
 findViewById<LinearLayout>(R.id.linearlayout)?.applyModel(GeneralViewMdl(
@@ -15,7 +15,7 @@ findViewById<LinearLayout>(R.id.linearlayout)?.applyModel(GeneralViewMdl(
 ))
 ```
 
-Edit some TextView parameters:
+Edit some `TextView` parameters:
 
 ```kt
 findViewById<TextView>(R.id.textview)?.applyModel(TextViewMdl(
