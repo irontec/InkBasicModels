@@ -30,6 +30,7 @@ fun RippleButton.applyModel(generalViewMdl: GeneralViewMdl?, textMdl: TextMdl?, 
 	if(rippleMdl?.cornerRadius!=null) corners = rippleMdl.cornerRadius
 	applyModel(TextViewMdl(textMdl, generalViewMdl))
 }
+///RIPPLEBUTTON
 
 //TEXTVIEW
 fun TextView.applyModelOrClear(model: TextViewMdl?){
@@ -60,6 +61,7 @@ fun TextView.applyModel(generalViewMdl: GeneralViewMdl?, textMdl: TextMdl?){
 	applyModel(generalViewMdl)
 	applyModel(textMdl)
 }
+///TEXTVIEW
 
 //RIPPLELAYOUT
 fun RippleLinearLayout.applyModel(mdl: RippleViewMdl?){
@@ -113,8 +115,9 @@ fun RippleLinearLayout.applyModelOrClear(mdl: RippleMdl?){
 	strokeColor = context.getColorCompat(mdl?.strokeColorResId ?: R.color.inkbasicmodels_default_text_color)
 	corners = mdl?.cornerRadius ?: 15F
 }
+///RIPPLELAYOUT
 
-//GENERAL
+//VIEW
 fun View.applyModel(mdl: GeneralViewMdl?) {
 	if(mdl?.onClick!=null) setOnClickListener { mdl.onClick.invoke(this) }
 	setPaddings(left = mdl?.paddingLeft, right = mdl?.paddingRight, top = mdl?.paddingTop, bottom = mdl?.paddingBottom)
@@ -126,6 +129,7 @@ fun View.applyModel(mdl: GeneralViewMdl?) {
 			if(this is LinearLayout.LayoutParams) gravity = it
 			if(this is FrameLayout.LayoutParams) gravity = it
 			if(this is CoordinatorLayout.LayoutParams) gravity = it
+			try{ if(this is CoordinatorLayout.LayoutParams) gravity = it }catch (ncdfe: NoClassDefFoundError){}
 		}
 		mdl?.rules?.let { if(this is RelativeLayout.LayoutParams) it.forEach { addRule(it) } }
 	}
@@ -141,8 +145,8 @@ fun View.applyModelOrClear(mdl: GeneralViewMdl?){
 		height = mdl?.height ?: ViewGroup.LayoutParams.WRAP_CONTENT
 		if(this is LinearLayout.LayoutParams) gravity = mdl?.gravity ?: Gravity.NO_GRAVITY
 		if(this is FrameLayout.LayoutParams) gravity = mdl?.gravity ?: Gravity.NO_GRAVITY
-		if(this is CoordinatorLayout.LayoutParams) gravity = mdl?.gravity ?: Gravity.NO_GRAVITY
 		if(this is RelativeLayout.LayoutParams) mdl?.rules?.forEach { addRule(it) } ?: addRule(RelativeLayout.ALIGN_START)
+		try{ if(this is CoordinatorLayout.LayoutParams) gravity = mdl?.gravity ?: Gravity.NO_GRAVITY }catch (ncdfe: NoClassDefFoundError){}
 	}
 }
 
@@ -155,12 +159,14 @@ private fun View.setMargins(left: Int? = null, top: Int? = null, right: Int? = n
 	layoutParams?.apply {
 		if(this is LinearLayout.LayoutParams) setMargins(left ?: this.leftMargin, top ?: this.topMargin, right ?: this.rightMargin, bottom ?: this.bottomMargin)
 		if(this is FrameLayout.LayoutParams) setMargins(left ?: this.leftMargin, top ?: this.topMargin, right ?: this.rightMargin, bottom ?: this.bottomMargin)
-		if(this is CoordinatorLayout.LayoutParams) setMargins(left ?: this.leftMargin, top ?: this.topMargin, right ?: this.rightMargin, bottom ?: this.bottomMargin)
 		if(this is RelativeLayout.LayoutParams) setMargins(left ?: this.leftMargin, top ?: this.topMargin, right ?: this.rightMargin, bottom ?: this.bottomMargin)
+		try{ if(this is CoordinatorLayout.LayoutParams) setMargins(left ?: this.leftMargin, top ?: this.topMargin, right ?: this.rightMargin, bottom ?: this.bottomMargin) }catch (ncdfe: NoClassDefFoundError){}
 	}
 	requestLayout()
 }
+///VIEW
 
+//UTILITIES
 private fun Context.getColorCompat(resId: Int): Int {
 	return resources.getColorCompat(resId)
 }
@@ -172,3 +178,4 @@ private fun Resources.getColorCompat(resId: Int): Int {
 		getColor(resId)
 	}
 }
+///UTILITIES

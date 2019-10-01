@@ -49,7 +49,8 @@ class MainActivity : AppCompatActivity() {
 						paddingBottom = 16.dpToPx(),
 						paddingLeft = 16.dpToPx(),
 						paddingRight = 16.dpToPx(),
-						paddingTop = 16.dpToPx()
+						paddingTop = 16.dpToPx(),
+						marginTop = 16.dpToPx()
 				),
 				rippleViewMdl = RippleMdl(
 						normalColorResId = R.color.colorPrimary,
