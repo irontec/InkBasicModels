@@ -3,6 +3,7 @@ package com.inlacou.inkbasicmodelslibraryproject
 import android.app.Application
 import com.inlacou.inkspannable.InkSpannableConfig
 import timber.log.Timber
+import java.lang.ref.WeakReference
 
 /**
  * Created by inlacou on 25/11/14.
@@ -16,7 +17,7 @@ class AppCtrl : Application() {
 		// initialize the singleton
 		instance = this
 		
-		InkSpannableConfig.context = this
+		InkSpannableConfig.context = WeakReference(this)
 	}
 
 	companion object {
@@ -26,12 +27,5 @@ class AppCtrl : Application() {
 		 */
 		lateinit var instance: AppCtrl
 			private set
-
-		fun generateCrash() {
-			val strings = arrayOf("Hola", "Don", "Pepito")
-			for (i in 0..19) {
-				Timber.d(".generateCrash | string: ${strings[i]}")
-			}
-		}
 	}
 }
