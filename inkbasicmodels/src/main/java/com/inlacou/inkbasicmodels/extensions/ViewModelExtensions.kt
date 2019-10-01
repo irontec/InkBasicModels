@@ -118,6 +118,7 @@ fun RippleLinearLayout.applyModelOrClear(mdl: RippleMdl?){
 fun View.applyModel(mdl: GeneralViewMdl?) {
 	if(mdl?.onClick!=null) setOnClickListener { mdl.onClick.invoke(this) }
 	setPaddings(left = mdl?.paddingLeft, right = mdl?.paddingRight, top = mdl?.paddingTop, bottom = mdl?.paddingBottom)
+	setMargins(left = mdl?.marginLeft, right = mdl?.marginRight, top = mdl?.marginTop, bottom = mdl?.marginBottom)
 	layoutParams = layoutParams?.apply {
 		mdl?.width?.let { width = it }
 		mdl?.height?.let { height = it }
@@ -134,6 +135,7 @@ fun View.applyModelOrClear(mdl: GeneralViewMdl?){
 	if(mdl?.onClick!=null) setOnClickListener { mdl.onClick.invoke(this) }
 	else setOnClickListener(null)
 	setPaddings(left = mdl?.paddingLeft ?: 0, right = mdl?.paddingRight ?: 0, top = mdl?.paddingTop ?: 0, bottom = mdl?.paddingBottom ?: 0)
+	setMargins(left = mdl?.marginLeft ?: 0, right = mdl?.marginRight ?: 0, top = mdl?.marginTop ?: 0, bottom = mdl?.marginBottom ?: 0)
 	layoutParams = layoutParams?.apply {
 		width = mdl?.width ?: ViewGroup.LayoutParams.WRAP_CONTENT
 		height = mdl?.height ?: ViewGroup.LayoutParams.WRAP_CONTENT
@@ -146,6 +148,16 @@ fun View.applyModelOrClear(mdl: GeneralViewMdl?){
 
 private fun View.setPaddings(left: Int? = null, top: Int? = null, right: Int? = null, bottom: Int? = null) {
 	setPadding(left ?: this.paddingLeft, top ?: this.paddingTop, right ?: this.paddingRight, bottom ?: this.paddingBottom)
+	requestLayout()
+}
+
+private fun View.setMargins(left: Int? = null, top: Int? = null, right: Int? = null, bottom: Int? = null) {
+	layoutParams?.apply {
+		if(this is LinearLayout.LayoutParams) setMargins(left ?: this.leftMargin, top ?: this.topMargin, right ?: this.rightMargin, bottom ?: this.bottomMargin)
+		if(this is FrameLayout.LayoutParams) setMargins(left ?: this.leftMargin, top ?: this.topMargin, right ?: this.rightMargin, bottom ?: this.bottomMargin)
+		if(this is CoordinatorLayout.LayoutParams) setMargins(left ?: this.leftMargin, top ?: this.topMargin, right ?: this.rightMargin, bottom ?: this.bottomMargin)
+		if(this is RelativeLayout.LayoutParams) setMargins(left ?: this.leftMargin, top ?: this.topMargin, right ?: this.rightMargin, bottom ?: this.bottomMargin)
+	}
 	requestLayout()
 }
 
