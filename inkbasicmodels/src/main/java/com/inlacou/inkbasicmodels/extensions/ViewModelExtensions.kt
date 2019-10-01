@@ -135,7 +135,7 @@ fun View.applyModel(mdl: GeneralViewMdl?) {
 	}
 }
 
-fun View.applyModelOrClear(mdl: GeneralViewMdl?){
+fun View.applyModelOrClear(mdl: GeneralViewMdl?) {
 	if(mdl?.onClick!=null) setOnClickListener { mdl.onClick.invoke(this) }
 	else setOnClickListener(null)
 	setPaddings(left = mdl?.paddingLeft ?: 0, right = mdl?.paddingRight ?: 0, top = mdl?.paddingTop ?: 0, bottom = mdl?.paddingBottom ?: 0)
@@ -145,7 +145,7 @@ fun View.applyModelOrClear(mdl: GeneralViewMdl?){
 		height = mdl?.height ?: ViewGroup.LayoutParams.WRAP_CONTENT
 		if(this is LinearLayout.LayoutParams) gravity = mdl?.gravity ?: Gravity.NO_GRAVITY
 		if(this is FrameLayout.LayoutParams) gravity = mdl?.gravity ?: Gravity.NO_GRAVITY
-		if(this is RelativeLayout.LayoutParams) mdl?.rules?.forEach { addRule(it) } ?: addRule(RelativeLayout.ALIGN_START)
+		if(this is RelativeLayout.LayoutParams) mdl?.rules?.forEach { addRule(it) } ?: addRule(if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN_MR1) RelativeLayout.ALIGN_START else RelativeLayout.ALIGN_LEFT)
 		try{ if(this is CoordinatorLayout.LayoutParams) gravity = mdl?.gravity ?: Gravity.NO_GRAVITY }catch (ncdfe: NoClassDefFoundError){}
 	}
 }
