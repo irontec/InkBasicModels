@@ -28,7 +28,8 @@ class MainActivity : AppCompatActivity() {
 				textMdl = TextMdl(
 						text = InkSpannableBuilder().addText("Example text with some").addBlank().addTextBold("bold"),
 						textColorResId = R.color.colorAccent,
-						textSizeSp = 20f
+						textSize = 20f,
+						textSizeDimensionType = DimensionType.DP
 				),
 				generalViewMdl = GeneralViewMdl(
 						onClick = { Toast.makeText(this, "You clicked me!", Toast.LENGTH_SHORT).show(); true},
@@ -42,7 +43,8 @@ class MainActivity : AppCompatActivity() {
 		findViewById<RippleButton>(R.id.ripplebutton)?.applyModel(RippleButtonViewMdl(
 				textMdl = TextMdl(
 						text = InkSpannableBuilder().addText("Button"),
-						textSizeSp = 20f
+						textSize = 20f,
+						textSizeDimensionType = DimensionType.DP
 				),
 				generalViewMdl = GeneralViewMdl(
 						onClick = { Toast.makeText(this, "You clicked me!", Toast.LENGTH_SHORT).show(); true},

@@ -13,16 +13,17 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.inlacou.inkbasicmodels.*
+import com.inlacou.inkbasicmodels.DimensionType.*
 import com.inlacou.pripple.RippleButton
 import com.inlacou.pripple.RippleLinearLayout
 import com.inlacou.pripple.RippleRelativeLayout
 
 //RIPPLEBUTTON
-fun RippleButton.applyModel(mdl: RippleButtonViewMdl?){
+fun RippleButton.applyModel(mdl: RippleButtonViewMdl?) {
 	applyModel(mdl?.generalViewMdl, mdl?.textMdl, mdl?.rippleViewMdl)
 }
 
-fun RippleButton.applyModel(generalViewMdl: GeneralViewMdl?, textMdl: TextMdl?, rippleMdl: RippleMdl?){
+fun RippleButton.applyModel(generalViewMdl: GeneralViewMdl?, textMdl: TextMdl?, rippleMdl: RippleMdl?) {
 	if(rippleMdl?.normalColorResId!=null) normalColor = context.getColorCompat(rippleMdl.normalColorResId)
 	if(rippleMdl?.rippleColorResId!=null) rippleColor = context.getColorCompat(rippleMdl.rippleColorResId)
 	if(rippleMdl?.strokeColorResId!=null) strokeColor = context.getColorCompat(rippleMdl.strokeColorResId)
@@ -33,15 +34,20 @@ fun RippleButton.applyModel(generalViewMdl: GeneralViewMdl?, textMdl: TextMdl?, 
 ///RIPPLEBUTTON
 
 //TEXTVIEW
-fun TextView.applyModelOrClear(model: TextViewMdl?){
+fun TextView.applyModelOrClear(model: TextViewMdl?) {
 	applyModelOrClear(model?.textMdl)
 	applyModelOrClear(model?.generalViewMdl)
 }
 
-fun TextView.applyModelOrClear(textMdl: TextMdl?){
+fun TextView.applyModelOrClear(textMdl: TextMdl?) {
 	setLinkTextColor(context.getColorCompat(textMdl?.textColorResId ?: R.color.inkbasicmodels_default_text_color))
 	setTextColor(context.getColorCompat(textMdl?.textColorResId ?: R.color.inkbasicmodels_default_text_color))
-	setTextSize(TypedValue.COMPLEX_UNIT_SP, textMdl?.textSizeSp ?: 16F)
+	when(textMdl?.textSizeDimensionType) {
+		PX -> setTextSize(TypedValue.COMPLEX_UNIT_PX, textMdl.textSize ?: 16F)
+		DP -> setTextSize(TypedValue.COMPLEX_UNIT_DIP, textMdl.textSize ?: 16F)
+		SP -> setTextSize(TypedValue.COMPLEX_UNIT_SP, textMdl.textSize ?: 16F)
+		null -> setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
+	}
 	text = textMdl?.text?.build() ?: ""
 }
 
@@ -50,36 +56,41 @@ fun TextView.applyModel(model: TextViewMdl?){
 	applyModel(model?.textMdl)
 }
 
-fun TextView.applyModel(textMdl: TextMdl?){
+fun TextView.applyModel(textMdl: TextMdl?) {
 	if(textMdl?.textColorResId!=null) setLinkTextColor(context.getColorCompat(textMdl.textColorResId))
 	if(textMdl?.textColorResId!=null) setTextColor(context.getColorCompat(textMdl.textColorResId))
-	if(textMdl?.textSizeSp!=null) setTextSize(TypedValue.COMPLEX_UNIT_SP, textMdl.textSizeSp)
+	if(textMdl?.textSize!=null) when(textMdl?.textSizeDimensionType) {
+		PX -> setTextSize(TypedValue.COMPLEX_UNIT_PX, textMdl.textSize ?: 16F)
+		DP -> setTextSize(TypedValue.COMPLEX_UNIT_DIP, textMdl.textSize ?: 16F)
+		SP -> setTextSize(TypedValue.COMPLEX_UNIT_SP, textMdl.textSize ?: 16F)
+		null -> setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
+	}
 	if(textMdl?.text!=null) text = textMdl.text.build()
 }
 
-fun TextView.applyModel(generalViewMdl: GeneralViewMdl?, textMdl: TextMdl?){
+fun TextView.applyModel(generalViewMdl: GeneralViewMdl?, textMdl: TextMdl?) {
 	applyModel(generalViewMdl)
 	applyModel(textMdl)
 }
 ///TEXTVIEW
 
 //RIPPLELAYOUT
-fun RippleLinearLayout.applyModel(mdl: RippleViewMdl?){
+fun RippleLinearLayout.applyModel(mdl: RippleViewMdl?) {
 	applyModel(mdl?.rippleMdl)
 	applyModel(mdl?.generalViewMdl)
 }
 
-fun RippleRelativeLayout.applyModel(mdl: RippleViewMdl?){
+fun RippleRelativeLayout.applyModel(mdl: RippleViewMdl?) {
 	applyModel(mdl?.rippleMdl)
 	applyModel(mdl?.generalViewMdl)
 }
 
-fun RippleLinearLayout.applyModelOrClear(mdl: RippleViewMdl?){
+fun RippleLinearLayout.applyModelOrClear(mdl: RippleViewMdl?) {
 	applyModelOrClear(mdl?.rippleMdl)
 	applyModelOrClear(mdl?.generalViewMdl)
 }
 
-fun RippleRelativeLayout.applyModelOrClear(mdl: RippleViewMdl?){
+fun RippleRelativeLayout.applyModelOrClear(mdl: RippleViewMdl?) {
 	applyModelOrClear(mdl?.rippleMdl)
 	applyModelOrClear(mdl?.generalViewMdl)
 }
