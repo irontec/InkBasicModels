@@ -1,6 +1,6 @@
 package com.inlacou.inkbasicmodels
 
-open class RippleMdl(
+data class RippleMdl(
 		val normalColorResId: Int? = null,
 		val rippleColorResId: Int? = null,
 		val strokeColorResId: Int? = null,

@@ -1,6 +1,6 @@
 package com.inlacou.inkbasicmodels
 
-data class TextViewMdl(
-		val textMdl: TextMdl? = null,
+data class ImageViewMdl(
+		val imageMdl: ImageMdl? = null,
 		val generalViewMdl: GeneralViewMdl? = null
 )

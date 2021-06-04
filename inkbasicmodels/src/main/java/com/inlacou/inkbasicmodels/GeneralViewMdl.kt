@@ -2,7 +2,7 @@ package com.inlacou.inkbasicmodels
 
 import android.view.View
 
-open class GeneralViewMdl(
+data class GeneralViewMdl(
 		val marginTop: Int? = null,
 		val marginBottom: Int? = null,
 		val marginLeft: Int? = null,

@@ -1,22 +1,25 @@
 package com.inlacou.inkbasicmodels.extensions
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.content.res.Resources
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.widget.ImageViewCompat
 import com.inlacou.inkbasicmodels.*
 import com.inlacou.inkbasicmodels.DimensionType.*
 import com.inlacou.pripple.RippleButton
 import com.inlacou.pripple.RippleLinearLayout
 import com.inlacou.pripple.RippleRelativeLayout
+import java.lang.Exception
 
 //RIPPLEBUTTON
 fun RippleButton.applyModel(mdl: RippleButtonViewMdl?) {
@@ -33,6 +36,46 @@ fun RippleButton.applyModel(generalViewMdl: GeneralViewMdl?, textMdl: TextMdl?, 
 }
 ///RIPPLEBUTTON
 
+//IMAGEVIEW
+fun ImageView.applyModelOrClear(model: ImageViewMdl?) {
+	applyModelOrClear(model?.imageMdl)
+	applyModelOrClear(model?.generalViewMdl)
+}
+
+fun ImageView.applyModelOrClear(model: ImageMdl?) {
+	model?.srcResId.let { resId ->
+		model?.drawable.let { drawable ->
+			when {
+				drawable!=null -> setImageDrawable(drawable)
+				resId!=null -> setImageResource(resId)
+				else -> setImageResource(android.R.color.transparent)
+			}
+		}
+	}
+	model?.tintColorResId.let { resId ->
+		model?.tintColor.let { color ->
+			when {
+				color!=null -> tintByColor(color)
+				resId!=null -> tintByResId(resId)
+				else -> clearTint()
+			}
+		}
+	}
+}
+
+fun ImageView.applyModel(model: ImageViewMdl?) {
+	applyModel(model?.imageMdl)
+	applyModel(model?.generalViewMdl)
+}
+
+fun ImageView.applyModel(model: ImageMdl?) {
+	model?.srcResId?.let { setImageResource(it) }
+	model?.drawable?.let { setImageDrawable(it) }
+	model?.tintColorResId?.let { tintByResId(it) }
+	model?.tintColor?.let { tintByColor(it) }
+}
+///IMAGEVIEW
+
 //TEXTVIEW
 fun TextView.applyModelOrClear(model: TextViewMdl?) {
 	applyModelOrClear(model?.textMdl)
@@ -40,6 +83,20 @@ fun TextView.applyModelOrClear(model: TextViewMdl?) {
 }
 
 fun TextView.applyModelOrClear(textMdl: TextMdl?) {
+	compoundDrawablePadding = textMdl?.drawableMargin ?: 0
+	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+		setCompoundDrawablesRelativeWithIntrinsicBounds(
+			textMdl?.leftStartImageMdl?.getDrawableTinted(resources),
+			textMdl?.topImageMdl?.getDrawableTinted(resources),
+			textMdl?.rightEndImageMdl?.getDrawableTinted(resources),
+			textMdl?.bottomImageMdl?.getDrawableTinted(resources))
+	} else {
+		setCompoundDrawablesWithIntrinsicBounds(
+			textMdl?.leftStartImageMdl?.getDrawableTinted(resources),
+			textMdl?.topImageMdl?.getDrawableTinted(resources),
+			textMdl?.rightEndImageMdl?.getDrawableTinted(resources),
+			textMdl?.bottomImageMdl?.getDrawableTinted(resources))
+	}
 	setLinkTextColor(context.getColorCompat(textMdl?.textColorResId ?: R.color.inkbasicmodels_default_text_color))
 	setTextColor(context.getColorCompat(textMdl?.textColorResId ?: R.color.inkbasicmodels_default_text_color))
 	when(textMdl?.textSizeDimensionType) {
@@ -57,15 +114,37 @@ fun TextView.applyModel(model: TextViewMdl?){
 }
 
 fun TextView.applyModel(textMdl: TextMdl?) {
-	if(textMdl?.textColorResId!=null) setLinkTextColor(context.getColorCompat(textMdl.textColorResId))
-	if(textMdl?.textColorResId!=null) setTextColor(context.getColorCompat(textMdl.textColorResId))
-	if(textMdl?.textSize!=null) when(textMdl?.textSizeDimensionType) {
-		PX -> setTextSize(TypedValue.COMPLEX_UNIT_PX, textMdl.textSize ?: 16F)
-		DP -> setTextSize(TypedValue.COMPLEX_UNIT_DIP, textMdl.textSize ?: 16F)
-		SP -> setTextSize(TypedValue.COMPLEX_UNIT_SP, textMdl.textSize ?: 16F)
-		null -> setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
+	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+		compoundDrawablesRelative
+	}else{
+		compoundDrawables
+	}.let { actualDrawables ->
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+			setCompoundDrawablesRelativeWithIntrinsicBounds(
+				textMdl?.leftStartImageMdl?.getDrawableTinted(resources) ?: actualDrawables[0],
+				textMdl?.topImageMdl?.getDrawableTinted(resources) ?: actualDrawables[1],
+				textMdl?.rightEndImageMdl?.getDrawableTinted(resources) ?: actualDrawables[2],
+				textMdl?.bottomImageMdl?.getDrawableTinted(resources) ?: actualDrawables[3])
+		} else {
+			setCompoundDrawablesWithIntrinsicBounds(
+				textMdl?.leftStartImageMdl?.getDrawableTinted(resources) ?: actualDrawables[0],
+				textMdl?.topImageMdl?.getDrawableTinted(resources) ?: actualDrawables[1],
+				textMdl?.rightEndImageMdl?.getDrawableTinted(resources) ?: actualDrawables[2],
+				textMdl?.bottomImageMdl?.getDrawableTinted(resources) ?: actualDrawables[3])
+		}
 	}
-	if(textMdl?.text!=null) text = textMdl.text.build()
+	textMdl?.textColorResId?.let {
+		setLinkTextColor(context.getColorCompat(it))
+		setTextColor(context.getColorCompat(it))
+	}
+	textMdl?.textSize?.let {
+		setTextSize(when(textMdl.textSizeDimensionType) {
+			PX -> TypedValue.COMPLEX_UNIT_PX
+			DP -> TypedValue.COMPLEX_UNIT_DIP
+			SP -> TypedValue.COMPLEX_UNIT_SP
+		}, it)
+	}
+	textMdl?.text?.let { text = it.build() }
 }
 
 fun TextView.applyModel(generalViewMdl: GeneralViewMdl?, textMdl: TextMdl?) {
@@ -187,6 +266,61 @@ private fun Resources.getColorCompat(resId: Int): Int {
 		getColor(resId, null)
 	}else{
 		getColor(resId)
+	}
+}
+private fun Resources.getDrawableCompat(resId: Int?): Drawable? {
+	return if(resId==null) null
+	else try{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			getDrawable(resId, null)
+		}else{
+			getDrawable(resId)
+		}
+	}catch (e: Exception) {
+		null
+	}
+}
+
+private fun Drawable.tintByResId(colorResId: Int, resources: Resources) {
+	colorFilter = PorterDuffColorFilter(resources.getColorCompat(colorResId), PorterDuff.Mode.SRC_IN)
+}
+
+private fun Drawable.tintByColor(color: Int) {
+	colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
+}
+
+private fun Drawable.clearTint() {
+	clearColorFilter()
+}
+
+private fun ImageView.tintByResId(colorResId: Int){
+	ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(resources.getColorCompat(colorResId)))
+}
+
+private fun ImageView.tintByColor(colorResId: Int){
+	ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(colorResId))
+}
+
+private fun ImageView.clearTint() {
+	ImageViewCompat.setImageTintList(this, null)
+}
+
+private fun ImageMdl.getDrawableTinted(resources: Resources): Drawable? {
+	val drawable = when {
+		drawable!=null -> drawable
+		srcResId!=null -> resources.getDrawableCompat(srcResId)
+		else -> null
+	}
+	val tintColor = when {
+		tintColor!=null -> tintColor
+		tintColorResId!=null -> resources.getColorCompat(tintColorResId)
+		else -> null
+	}
+
+	return when {
+		tintColor!=null && drawable!=null -> drawable.apply { tintByColor(tintColor) }
+		tintColor==null && drawable!=null -> drawable
+		else -> null
 	}
 }
 ///UTILITIES

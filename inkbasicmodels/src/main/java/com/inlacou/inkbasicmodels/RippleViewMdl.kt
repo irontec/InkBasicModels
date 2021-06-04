@@ -1,6 +1,6 @@
 package com.inlacou.inkbasicmodels
 
-open class RippleViewMdl(
+data class RippleViewMdl(
 		val generalViewMdl: GeneralViewMdl = GeneralViewMdl(),
 		val rippleMdl: RippleMdl = RippleMdl()
 )
